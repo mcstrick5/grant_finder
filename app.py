@@ -123,7 +123,7 @@ def _parse_date(value):
 
 
 def _add_url(hit):
-    hit["url"] = f"https://www.grants.gov/view-opportunity.html?oppId={hit.get('id')}"
+    hit["url"] = f"https://www.grants.gov/search-results-detail/{hit.get('id')}"
     return hit
 
 
