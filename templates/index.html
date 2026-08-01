@@ -27,12 +27,37 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     label { display: block; margin: 1rem 0 0.25rem; font-weight: 600; }
-    input, select {
+    input, select, textarea {
       width: 100%;
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
+      font-family: inherit;
+    }
+    details {
+      margin: 1rem 0;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+    summary { cursor: pointer; font-weight: 600; }
+    a.result {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    a.result:hover { border-color: #2563eb; }
+    .score {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
     button {
       margin-top: 1rem;
@@ -65,17 +90,42 @@
       <h2>Find grants</h2>
       <form action="/search" method="post">
         <label for="keyword">Keyword</label>
-        <input id="keyword" type="text" name="keyword" placeholder="e.g. health, energy, education" value="{{ keyword or '' }}" required>
+        <input id="keyword" type="text" name="keyword" placeholder="e.g. health, energy, education" value="{{ keyword or '' }}">
 
-        <label for="rows">Number of results</label>
-        <input id="rows" type="number" name="rows" value="20" min="1" max="100">
+        <label for="description">Project description (smart match)</label>
+        <textarea id="description" name="description" placeholder="Describe your project or organization in a few sentences" rows="4">{{ description or '' }}</textarea>
 
-        <label for="status">Status</label>
-        <select id="status" name="status">
-          <option value="posted" selected>Open/Posted</option>
-          <option value="forecasted">Forecasted</option>
-          <option value="closed">Closed</option>
-        </select>
+        <details>
+          <summary>Filters</summary>
+
+          <label for="rows">Number of results</label>
+          <input id="rows" type="number" name="rows" value="{{ rows or 20 }}" min="1" max="100">
+
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="posted" {% if status == 'posted' %}selected{% endif %}>Open/Posted</option>
+            <option value="forecasted" {% if status == 'forecasted' %}selected{% endif %}>Forecasted</option>
+            <option value="closed" {% if status == 'closed' %}selected{% endif %}>Closed</option>
+          </select>
+
+          <label for="agencies">Agency code(s)</label>
+          <input id="agencies" type="text" name="agencies" placeholder="e.g. HHS, USDA, DOE" value="{{ agencies or '' }}">
+
+          <label for="funding_categories">Funding categories</label>
+          <input id="funding_categories" type="text" name="funding_categories" placeholder="e.g. AR, ED, ENV" value="{{ funding_categories or '' }}">
+
+          <label for="funding_instruments">Funding instruments</label>
+          <input id="funding_instruments" type="text" name="funding_instruments" placeholder="e.g. G, CA, O" value="{{ funding_instruments or '' }}">
+
+          <label for="eligibilities">Eligibility code(s)</label>
+          <input id="eligibilities" type="text" name="eligibilities" placeholder="e.g. 01, 12, 25" value="{{ eligibilities or '' }}">
+
+          <label for="open_after">Open on or after</label>
+          <input id="open_after" type="date" name="open_after" value="{{ open_after or '' }}">
+
+          <label for="close_before">Close on or before</label>
+          <input id="close_before" type="date" name="close_before" value="{{ close_before or '' }}">
+        </details>
 
         <button type="submit">Search</button>
       </form>
@@ -108,14 +158,17 @@
   <h2>Results</h2>
   {% if results %}
     {% for r in results %}
-    <div class="result">
+    <a class="result" href="{{ r.url }}" target="_blank" rel="noopener">
       <strong>{{ r.title }}</strong> ({{ r.number }})<br>
+      {% if r.match_pct is defined %}
+      <span class="score">{{ r.match_pct }}% match</span><br>
+      {% endif %}
       <div class="meta">
         Agency: {{ r.agencyName or 'N/A' }}<br>
         Open: {{ r.openDate or 'N/A' }} | Close: {{ r.closeDate or 'N/A' }}<br>
         Status: {{ r.oppStatus }}
       </div>
-    </div>
+    </a>
     {% endfor %}
   {% else %}
     <p class="none">No matching grants found.</p>
