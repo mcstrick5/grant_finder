@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grant Finder</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 2rem;
+      background: #f6f8fa;
+      color: #222;
+    }
+    h1 { margin-top: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    label { display: block; margin: 1rem 0 0.25rem; font-weight: 600; }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: #1d4ed8; }
+    .result {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .result strong { font-size: 1.05rem; }
+    .meta { color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }
+    .none { color: #64748b; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Grant Finder</h1>
+  <p>Search open U.S. government grants and get email alerts when new matches appear.</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Find grants</h2>
+      <form action="/search" method="post">
+        <label for="keyword">Keyword</label>
+        <input id="keyword" type="text" name="keyword" placeholder="e.g. health, energy, education" value="{{ keyword or '' }}" required>
+
+        <label for="rows">Number of results</label>
+        <input id="rows" type="number" name="rows" value="20" min="1" max="100">
+
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="posted" selected>Open/Posted</option>
+          <option value="forecasted">Forecasted</option>
+          <option value="closed">Closed</option>
+        </select>
+
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Set an email alert</h2>
+      <form action="/alerts" method="post">
+        <label for="alert-email">Email</label>
+        <input id="alert-email" type="email" name="email" placeholder="you@example.com" required>
+
+        <label for="alert-keyword">Keyword to watch</label>
+        <input id="alert-keyword" type="text" name="keyword" placeholder="e.g. agriculture" required>
+
+        <label for="alert-agencies">Agency code(s) (optional)</label>
+        <input id="alert-agencies" type="text" name="agencies" placeholder="e.g. HHS, USDA">
+
+        <label for="alert-status">Status to watch</label>
+        <select id="alert-status" name="status">
+          <option value="posted" selected>Open/Posted</option>
+          <option value="forecasted">Forecasted</option>
+        </select>
+
+        <button type="submit">Create alert</button>
+      </form>
+    </section>
+  </div>
+
+  {% if results is defined %}
+  <h2>Results</h2>
+  {% if results %}
+    {% for r in results %}
+    <div class="result">
+      <strong>{{ r.title }}</strong> ({{ r.number }})<br>
+      <div class="meta">
+        Agency: {{ r.agencyName or 'N/A' }}<br>
+        Open: {{ r.openDate or 'N/A' }} | Close: {{ r.closeDate or 'N/A' }}<br>
+        Status: {{ r.oppStatus }}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="none">No matching grants found.</p>
+  {% endif %}
+  {% endif %}
+</body>
+</html>
