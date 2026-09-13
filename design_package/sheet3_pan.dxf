@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461290.055428241
+2461297.060208333
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461290.055428241
+2461297.060208333
   9
 $TDUUPDATE
  40
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{9275F340-355E-47A5-B279-219133725229}
+{BC708013-8491-4F9A-B5E5-18B1248E86B5}
   9
 $VERSIONGUID
   2
-{B4478D8E-E31A-4CC7-882C-24112360E545}
+{355EC40A-9656-442F-B19D-4ED19B12C22D}
   9
 $EXTNAMES
 290
@@ -7583,7 +7583,7 @@ AcDbText
  40
 18.0
   1
-SECTION B-B (long axis)
+SECTION B-B (through centre)
  11
 -170.0
  21
@@ -8111,17 +8111,17 @@ AcDbText
  10
 -170.0
  20
--740.0
+-1000.0
  30
 0.0
  40
-13.5
+12.6
   1
 NOTES
  11
 -170.0
  21
--740.0
+-1000.0
  31
 0.0
 100
@@ -8141,17 +8141,17 @@ AcDbText
  10
 -170.0
  20
--761.6
+-1020.16
  30
 0.0
  40
-13.5
+12.6
   1
 0. Round (revolved) pan.  Draft angle 11.3 deg.  Wall 2.5 mm nominal.  Base corner R15 inside.
  11
 -170.0
  21
--761.6
+-1020.16
  31
 0.0
 100
@@ -8171,17 +8171,17 @@ AcDbText
  10
 -170.0
  20
--783.2
+-1040.32
  30
 0.0
  40
-13.5
+12.6
   1
 1. Capacity: ~9.3 L brim-full; 7 qt (6.7 L) working capacity at moulded MAX FILL line 115 mm above base.
  11
 -170.0
  21
--783.2
+-1040.32
  31
 0.0
 100
@@ -8201,17 +8201,17 @@ AcDbText
  10
 -170.0
  20
--804.8
+-1060.48
  30
 0.0
  40
-13.5
+12.6
   1
    Concentric with the 440 mm round seat and its 300 x 220 aperture (pan rim 310 dia fully surrounds aperture).
  11
 -170.0
  21
--804.8
+-1060.48
  31
 0.0
 100
@@ -8231,17 +8231,17 @@ AcDbText
  10
 -170.0
  20
--826.4
+-1080.64
  30
 0.0
  40
-13.5
+12.6
   1
 2. Flange rests on carrier plate cutout (Sheet 2). Two moulded end grips for lift-out.
  11
 -170.0
  21
--826.4
+-1080.64
  31
 0.0
 100
@@ -8261,17 +8261,17 @@ AcDbText
  10
 -170.0
  20
--848.0
+-1100.8
  30
 0.0
  40
-13.5
+12.6
   1
 3. Supply with snap-on splash lid (P/N SP-03, same rim profile) - lid fitted once pan is extended before carrying.
  11
 -170.0
  21
--848.0
+-1100.8
  31
 0.0
 100
@@ -8291,17 +8291,17 @@ AcDbText
  10
 -170.0
  20
--869.6
+-1120.96
  30
 0.0
  40
-13.5
+12.6
   1
 4. Material: polypropylene copolymer, min. 2.5 mm wall, autoclavable / dishwasher-safe. Alt: 0.8 mm 304 SS deep-drawn, polished.
  11
 -170.0
  21
--869.6
+-1120.96
  31
 0.0
 100
@@ -8321,17 +8321,17 @@ AcDbText
  10
 -170.0
  20
--891.2
+-1141.12
  30
 0.0
  40
-13.5
+12.6
   1
-5. Tolerance +/-1.0 mm; rim must pass freely through carrier cutout (5 mm radial clearance); flange OD 340 clears carrier flanges (351 inside).
+5. Tolerance +/-1.0 mm; rim must pass freely through carrier cutout (5 mm radial clearance); flange OD 340 clears carrier side flanges (369 inside).
  11
 -170.0
  21
--891.2
+-1141.12
  31
 0.0
 100
@@ -9439,7 +9439,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-09-06T01:19:49.204077+00:00
+1.4.4 @ 2026-09-13T01:26:42.024682+00:00
   0
 VISUALSTYLE
   5
@@ -10151,7 +10151,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-09-06T01:19:49.526096+00:00
+1.4.4 @ 2026-09-13T01:26:42.344220+00:00
   0
 ENDSEC
   0

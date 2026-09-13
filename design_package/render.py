@@ -89,13 +89,13 @@ if __name__ == "__main__":
     ext = model.build(model.TRAVEL)
     render(closed, f"{OUT}/render_01_closed_iso.png",
            title="Folding commode with slide-out pan  -  CLOSED (pan latched under seat)")
-    render(ext, f"{OUT}/render_02_extended_iso.png",
-           title="Pan slid out to caregiver side  -  FULL EXTENSION (20 in / 508 mm)")
-    render(ext, f"{OUT}/render_03_extended_front.png", cam_dir=(0.15, -1, 0.12),
-           title="Front view  -  pan extended, clears right-hand legs for lift-out")
-    render(ext, f"{OUT}/render_04_extended_seat_ghosted.png", cam_dir=(1.0, -0.9, 1.1), transparent=("seat", "lid"),
-           title="Seat/lid ghosted  -  ball-bearing slides, carrier plate (blue), pan")
+    render(ext, f"{OUT}/render_02_extended_iso.png", cam_dir=(1.3, 1.0, 0.75),
+           title="Pan slid out the BACK (caregiver behind chair)  -  FULL EXTENSION (20 in / 508 mm)")
+    render(ext, f"{OUT}/render_03_extended_side.png", cam_dir=(1, 0.15, 0.12),
+           title="Side view  -  pan extended rearward, clears rear legs for lift-out")
+    render(ext, f"{OUT}/render_04_extended_seat_ghosted.png", cam_dir=(1.0, 0.9, 1.1), transparent=("seat", "lid", "backrest"),
+           title="Seat/lid ghosted  -  ball-bearing slides on side rails, carrier plate (blue), pan")
     render({k: closed[k] for k in ("frame", "slides", "carrier", "pan")}, f"{OUT}/render_05_closed_underside.png",
-           cam_dir=(1.0, -1.0, -0.7), title="Underside  -  closed position, slide clamps on front/rear cross bars")
+           cam_dir=(1.0, -1.0, -0.7), title="Underside  -  closed position, side rails clamped to front/rear cross bars")
     render({k: ext[k] for k in ("slides", "carrier", "pan")}, f"{OUT}/render_06_slide_assembly.png",
-           cam_dir=(1.0, -1.2, 0.9), title="Slide-pan sub-assembly (new parts only)")
+           cam_dir=(1.2, 1.0, 0.9), title="Slide-pan sub-assembly (new parts only)")

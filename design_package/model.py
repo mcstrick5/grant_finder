@@ -1,5 +1,5 @@
-"""Parametric model: folding commode chair with side-sliding removable pan.
-Units: mm.  X = side-to-side (+X = caregiver / slide-out side), Y = front(-)/back(+), Z = up.
+"""Parametric model: folding commode chair with REAR-sliding removable pan.
+Units: mm.  X = side-to-side, Y = front(-)/back(+)  (+Y = slide-out / caregiver side), Z = up.
 """
 import cadquery as cq
 
@@ -30,8 +30,15 @@ SLIDE_T = 12.7        # thickness per slide (closed)
 SLIDE_Z = 375.0       # slide bottom
 TRAVEL = 508.0
 
-CARRIER_X = 400.0
-CARRIER_Y = 2 * (LEG_Y - TUBE_OD / 2 - SLIDE_T)  # fits between the slides  (~354)
+# slides run front->back along Y, one each side at x = +/-RAIL_X, hung from two
+# longitudinal angle rails that clamp under the existing front & rear cross bars
+RAIL_X = 200.0        # rail web plane (slide outer face)
+RAIL_FLANGE = 40.0    # horizontal leg of the 40x40x3 angle rail (points outward)
+RAIL_T = 3.0
+RAIL_LEN = SLIDE_LEN
+
+CARRIER_X = 2 * (RAIL_X - SLIDE_T)                # width between drawer members (~375)
+CARRIER_Y = 400.0                                 # length along slide direction
 CARRIER_T = 6.0
 CARRIER_Z = SLIDE_Z + SLIDE_H                     # plate bottom sits on slide top (420)
 CUTOUT_DIA = 320.0                                # round cutout in carrier
@@ -42,7 +49,7 @@ PAN_BOT_DIA = 250.0
 PAN_TOP_X = PAN_TOP_Y = PAN_DIA
 PAN_BOT_X = PAN_BOT_Y = PAN_BOT_DIA
 PAN_DEPTH = 150.0
-PAN_FLANGE = 15.0                                 # flange OD 340 < carrier inner width 351
+PAN_FLANGE = 15.0                                 # flange OD 340 < carrier inner width ~369
 PAN_WALL = 2.5
 HANDLE_W = 120.0
 
@@ -118,28 +125,34 @@ def backrest():
 
 
 def slide_pair(ext):
-    """Two full-extension slides on front/rear cross bars; ext = drawer travel (0..TRAVEL)."""
+    """Two full-extension slides running along Y (front->back) at x = +/-RAIL_X, each
+    bolted to an angle rail that is clamped under the front & rear cross bars.
+    ext = drawer travel toward +Y (rear), 0..TRAVEL."""
     parts = []
-    for sy in (-1, 1):
-        y_in = sy * (LEG_Y - TUBE_OD / 2)           # inner face of cross bar tube
-        # cabinet member (fixed)  - hugs the tube, thickness SLIDE_T/2
-        yc = y_in - sy * SLIDE_T / 4
-        parts.append(cq.Workplane("XY").box(SLIDE_LEN, SLIDE_T / 2, SLIDE_H)
-                     .translate((0, yc, SLIDE_Z + SLIDE_H / 2)))
+    rail_top = SLIDE_Z + SLIDE_H
+    for sx in (-1, 1):
+        xw = sx * RAIL_X                              # rail web plane
+        # angle rail: vertical web (outboard of slide) + horizontal top leg pointing outward
+        parts.append(cq.Workplane("XY").box(RAIL_T, RAIL_LEN, SLIDE_H)
+                     .translate((xw + sx * RAIL_T / 2, 0, SLIDE_Z + SLIDE_H / 2)))
+        parts.append(cq.Workplane("XY").box(RAIL_FLANGE, RAIL_LEN, RAIL_T)
+                     .translate((xw + sx * RAIL_FLANGE / 2, 0, rail_top - RAIL_T / 2)))
+        # cabinet member (fixed) against the web
+        parts.append(cq.Workplane("XY").box(SLIDE_T / 2, SLIDE_LEN, SLIDE_H)
+                     .translate((xw - sx * SLIDE_T / 4, 0, SLIDE_Z + SLIDE_H / 2)))
         # drawer member (moving)
-        yd = y_in - sy * 3 * SLIDE_T / 4
-        parts.append(cq.Workplane("XY").box(SLIDE_LEN, SLIDE_T / 2, SLIDE_H - 6)
-                     .translate((ext, yd, SLIDE_Z + SLIDE_H / 2)))
-        # tube clamp brackets (3 per bar)
-        for x in (-180, 0, 180):
-            clamp = (cq.Workplane("YZ").center(sy * LEG_Y, CROSSBAR_Z)
-                     .circle(TUBE_OD / 2 + 3).extrude(30).translate((x - 15, 0, 0)))
-            bore = tube((x - 16, sy * LEG_Y, CROSSBAR_Z), (x + 16, sy * LEG_Y, CROSSBAR_Z))
-            clamp = clamp.cut(bore)
-            # tab down to slide
-            tab = cq.Workplane("XY").box(30, 6, CROSSBAR_Z - SLIDE_Z).translate(
-                (x, y_in - sy * 3, (CROSSBAR_Z + SLIDE_Z) / 2))
-            parts.append(clamp.union(tab))
+        parts.append(cq.Workplane("XY").box(SLIDE_T / 2, SLIDE_LEN, SLIDE_H - 6)
+                     .translate((xw - sx * 3 * SLIDE_T / 4, ext, SLIDE_Z + SLIDE_H / 2)))
+        # tube clamp brackets: saddle on each cross bar + foot bolted to rail top leg
+        for sy in (-1, 1):
+            y = sy * LEG_Y
+            xc = xw + sx * RAIL_FLANGE / 2
+            clamp = (cq.Workplane("YZ").center(y, CROSSBAR_Z)
+                     .circle(TUBE_OD / 2 + 3).extrude(30).translate((xc - 15, 0, 0)))
+            bore = tube((xc - 16, y, CROSSBAR_Z), (xc + 16, y, CROSSBAR_Z))
+            foot = cq.Workplane("XY").box(30, TUBE_OD + 6, CROSSBAR_Z - rail_top).translate(
+                (xc, y, (CROSSBAR_Z + rail_top) / 2))
+            parts.append(clamp.union(foot).cut(bore))
     solid = parts[0]
     for p in parts[1:]:
         solid = solid.union(p)
@@ -150,17 +163,17 @@ def carrier(ext):
     plate = rounded_box(CARRIER_X, CARRIER_Y, CARRIER_T, 60)
     cut = cq.Workplane("XY").circle(CUTOUT_DIA / 2).extrude(50).translate((0, 0, -25))
     plate = plate.cut(cut)
-    # front/rear down-turned flanges bolted to slide drawer members
-    for sy in (-1, 1):
-        fl = cq.Workplane("XY").box(SLIDE_LEN - 20, 3, SLIDE_H - 10).translate(
-            (0, sy * (CARRIER_Y / 2 - 1.5), -(SLIDE_H - 10) / 2 + CARRIER_T / 2))
+    # left/right down-turned flanges bolted to slide drawer members
+    for sx in (-1, 1):
+        fl = cq.Workplane("XY").box(3, SLIDE_LEN - 20, SLIDE_H - 10).translate(
+            (sx * (CARRIER_X / 2 - 1.5), 0, -(SLIDE_H - 10) / 2 + CARRIER_T / 2))
         plate = plate.union(fl)
-    # D pull handle on the +X end
-    h = (cq.Workplane("XY").box(12, HANDLE_W, 12).translate((CARRIER_X / 2 + 40, 0, 0)))
-    for sy in (-1, 1):
-        h = h.union(cq.Workplane("XY").box(40, 12, 12).translate((CARRIER_X / 2 + 20, sy * (HANDLE_W / 2 - 6), 0)))
+    # D pull handle on the +Y (rear) end
+    h = (cq.Workplane("XY").box(HANDLE_W, 12, 12).translate((0, CARRIER_Y / 2 + 40, 0)))
+    for sx in (-1, 1):
+        h = h.union(cq.Workplane("XY").box(12, 40, 12).translate((sx * (HANDLE_W / 2 - 6), CARRIER_Y / 2 + 20, 0)))
     plate = plate.union(h.edges().fillet(3))
-    return plate.translate((ext, 0, CARRIER_Z + CARRIER_T / 2))
+    return plate.translate((0, ext, CARRIER_Z + CARRIER_T / 2))
 
 
 def pan(ext):
@@ -183,7 +196,7 @@ def pan(ext):
         g = cq.Workplane("XY").box(30, 90, 8).edges("|Z").fillet(3).translate(
             (sx * (PAN_DIA / 2 + PAN_FLANGE + 8), 0, top_z + 4))
         body = body.union(g)
-    return body.translate((ext, 0, 0))
+    return body.translate((0, ext, 0))
 
 
 def build(ext=0.0):
