@@ -9,7 +9,6 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 TITLE = "REQUEST FOR QUOTE - Rear Slide-Out Pan Bedside Commode (Rev B)"
 
 SECTIONS = [
-    ("From", "Matthew McStrick  |  mcstrickuga@gmail.com"),
     ("Date", "________________"),
     ("Project", "Retrofit module for a standard folding aluminium bedside commode that lets a caregiver empty the waste pan\n"
                 "while the user remains seated. The round pan slides 20\" (508 mm) straight out the BACK of the chair on two\n"
@@ -40,8 +39,19 @@ SECTIONS = [
      "  1. Material recommendation for carrier (HDPE vs 304 SS) and pan (moulded PP vs drawn SS) at each volume.\n"
      "  2. Engineering review of slide/rail loading and tip stability with the pan extended; propose changes if needed.\n"
      "  3. Whether the design fits your standard commode frame, or dimensions that must change.\n"
-     "  4. Applicable standards you can test/certify to for a bedside commode in our market.\n"
-     "  5. Lead time for prototype, pilot and production; tooling costs and ownership; MOQ."),
+     "  4. Lead time for prototype, pilot and production; tooling costs and ownership; MOQ."),
+    ("US market / regulatory requirements (product ships to the United States)",
+     "  - FDA: commode is a Class I medical device (21 CFR 890.3100/890.3110, 510(k)-exempt). Manufacturer must hold\n"
+     "    FDA Establishment Registration and Device Listing and follow 21 CFR 820 QMS (or ISO 13485). Provide evidence.\n"
+     "  - Testing: static load and stability per ISO 17966 (assistive products for personal hygiene) and/or RESNA;\n"
+     "    supply test reports for 300 lb (136 kg) rated user load with pan extended.\n"
+     "  - Materials: skin-contact parts biocompatible (ISO 10993-5/-10); pan/lid plastics food-grade PP. Vinyl, foam and\n"
+     "    plastics to meet California Prop 65 and CPSIA/16 CFR limits for lead, cadmium and phthalates; RoHS declaration.\n"
+     "  - Corrosion: salt-spray / cleaning-agent resistance test on slides, rails, clamps and fasteners (e.g. ASTM B117).\n"
+     "  - Labeling: permanent label with model, rated load, manufacturer, country of origin (19 CFR 134 'Made in China'),\n"
+     "    English instructions for use and cleaning; UDI/labeling per 21 CFR 801 as applicable.\n"
+     "  - Quality: ISO 9001 certificate; pre-shipment inspection (AQL) report; packaging drop test (ISTA/ASTM D4169).\n"
+     "  - Supplier to state the HTS code and confirm any US import tariff applicable to their quote."),
     ("Files provided",
      "  README_manufacturer_brief.md (start here)  |  sheet1-4 PDF + DXF drawings and BOM\n"
      "  commode_slide_pan_closed / _extended .STEP + .STL (full assembly)  |  part_*.step (individual parts)\n"
@@ -60,8 +70,8 @@ def write_pdf():
     for head, body in SECTIONS:
         ax.text(0.06, y, head.upper(), fontsize=8.5, weight="bold", va="top", color="#333")
         y -= 0.017
-        ax.text(0.06, y, body, fontsize=8, va="top", family="DejaVu Sans", linespacing=1.35)
-        y -= 0.0145 * (body.count("\n") + 1) + 0.014
+        ax.text(0.06, y, body, fontsize=7.6, va="top", family="DejaVu Sans", linespacing=1.3)
+        y -= 0.0133 * (body.count("\n") + 1) + 0.011
     ax.text(0.06, 0.03, "Please reply with your quotation and any design comments. Thank you.", fontsize=8.5, va="bottom")
     fig.savefig(f"{OUT}/RFQ_cover_letter.pdf")
     fig.savefig(f"{OUT}/RFQ_cover_letter.png", dpi=150)

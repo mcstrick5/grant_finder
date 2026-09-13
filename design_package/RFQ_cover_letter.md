@@ -1,10 +1,5 @@
 # REQUEST FOR QUOTE - Rear Slide-Out Pan Bedside Commode (Rev B)
 
-## From
-
-Matthew McStrick  |  mcstrickuga@gmail.com
-
-
 ## Date
 
 ________________
@@ -53,8 +48,22 @@ For each, state whether you supply the base chair or fit the module to a chair w
   1. Material recommendation for carrier (HDPE vs 304 SS) and pan (moulded PP vs drawn SS) at each volume.
   2. Engineering review of slide/rail loading and tip stability with the pan extended; propose changes if needed.
   3. Whether the design fits your standard commode frame, or dimensions that must change.
-  4. Applicable standards you can test/certify to for a bedside commode in our market.
-  5. Lead time for prototype, pilot and production; tooling costs and ownership; MOQ.
+  4. Lead time for prototype, pilot and production; tooling costs and ownership; MOQ.
+```
+
+## US market / regulatory requirements (product ships to the United States)
+```
+  - FDA: commode is a Class I medical device (21 CFR 890.3100/890.3110, 510(k)-exempt). Manufacturer must hold
+    FDA Establishment Registration and Device Listing and follow 21 CFR 820 QMS (or ISO 13485). Provide evidence.
+  - Testing: static load and stability per ISO 17966 (assistive products for personal hygiene) and/or RESNA;
+    supply test reports for 300 lb (136 kg) rated user load with pan extended.
+  - Materials: skin-contact parts biocompatible (ISO 10993-5/-10); pan/lid plastics food-grade PP. Vinyl, foam and
+    plastics to meet California Prop 65 and CPSIA/16 CFR limits for lead, cadmium and phthalates; RoHS declaration.
+  - Corrosion: salt-spray / cleaning-agent resistance test on slides, rails, clamps and fasteners (e.g. ASTM B117).
+  - Labeling: permanent label with model, rated load, manufacturer, country of origin (19 CFR 134 'Made in China'),
+    English instructions for use and cleaning; UDI/labeling per 21 CFR 801 as applicable.
+  - Quality: ISO 9001 certificate; pre-shipment inspection (AQL) report; packaging drop test (ISTA/ASTM D4169).
+  - Supplier to state the HTS code and confirm any US import tariff applicable to their quote.
 ```
 
 ## Files provided
